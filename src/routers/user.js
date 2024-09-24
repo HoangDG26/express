@@ -1,21 +1,12 @@
 import express from 'express'
+import ControllerModule from '../controllers/index.js'
 
 const router = express.Router()
 
-
-router.get('/', (req, res) => {
-    res.send('get user')
-})
-
-router.post('/login', (req, res) => {
+router.post('/', (req, res) => {
     res.send('post user')
 })
-router.post('/register', (req, res) => {
-    res.send('regiter user')
-})
-router.patch('/', (req, res) => {
-    res.send('PATCH user')
-})
+router.post('/sign-up', ControllerModule.UserController.signUp)
 export default router
 
 

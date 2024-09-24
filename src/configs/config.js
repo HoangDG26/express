@@ -9,8 +9,10 @@ const dev = {
         port: process.env.DEV_DB_PORT,
         name: process.env.DEV_DB_NAME,
         // password:,
+    },
+    jwt: {
+        secret_key: process.env.JWT_SECRET
     }
-
 }
 const prod = {
     app: {
@@ -21,6 +23,9 @@ const prod = {
         port: process.env.PROD_DB_PORT,
         name: process.env.PROD_DB_NAME,
         // password:,
+    },
+    jwt: {
+        secret_key: process.env.JWT_SECRET
     }
 
 }
