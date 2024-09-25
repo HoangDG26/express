@@ -1,23 +1,28 @@
-import JWT from 'jsonwebtoken'
 
+import JWT from 'jsonwebtoken'
+import { envConfig } from '../configs/config.js'
 const createTokenPair = async (payload, publicKey, privateKey) => {
     try {
-        const accessToken = await JWT.sign(payload, privateKey,
-            {
-                // algorithm: 'RS256',
-                expiresIn: '2 days'
+        const accessToken = JWT.sign(payload, publicKey,
+            { expiressIn: envConfig.jwt.expiresIn_accesstoken })
+
+        const refreshToken = JWT.sign(payload, privateKey,
+            { expiresIn: envConfig.jwt.expiresIn_refreshtoken })
+
+        JWT.verify(accessToken, publicKey,
+            (err, decode) => {
+                if (err) {
+                    console.log(`error verify::`, err)
+                } else {
+                    console.log(`decode verify::`, decode)
+                }
+
             }
         )
-        const refreshToken = await JWT.sign(payload, privateKey,
-            {
-                // algorithm: 'RS256',
-                expiresIn: '7 days'
-            }
-        )
-        JWT.verify(accessToken, publicKey)
-        return (accessToken, refreshToken)
+        return { accessToken, refreshToken }
+
     } catch (error) {
+
     }
 }
-
 export default createTokenPair

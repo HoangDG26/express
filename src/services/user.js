@@ -22,18 +22,6 @@ class UserService {
             })
 
             if (newUser) {
-                // const { privateKey, publicKey } = crypto.generateKeyPairSync('rsa', {
-                //     modulusLength: 4096,
-                //     publicKeyEncoding: {
-                //         type: 'pkcs1',
-                //         format: 'pem',
-                //     },
-                //     privateKeyEncoding: {
-                //         type: 'pkcs1',
-                //         format: 'pem',
-
-                //     }
-                // })
                 const privateKey = crypto.randomBytes(64).toString('hex')
                 const publicKey = crypto.randomBytes(64).toString('hex')
 
@@ -48,10 +36,6 @@ class UserService {
                         message: "keyStore error"
                     }
                 }
-                // console.log(`publicKeyString::`, publicKeyString)
-                // const publicKeyObject = crypto.createPublicKey(publicKeyString)
-                // console.log(`publicKeyObject::`, publicKeyObject)
-
                 const tokens = await createTokenPair(
                     { userId: newUser._id, email },
                     publicKey,

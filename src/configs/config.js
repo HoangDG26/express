@@ -11,7 +11,8 @@ const dev = {
         // password:,
     },
     jwt: {
-        secret_key: process.env.JWT_SECRET
+        expiresIn_accesstoken: process.env.EXPIRESIN_ACCESSTOKEN,
+        expiresIn_refreshtoken: process.env.EXPIRESIN_REFRESHTOKEN,
     }
 }
 const prod = {
@@ -25,7 +26,8 @@ const prod = {
         // password:,
     },
     jwt: {
-        secret_key: process.env.JWT_SECRET
+        expiresIn_accesstoken: process.env.EXPIRESIN_ACCESSTOKEN,
+        expiresIn_refreshtoken: process.env.EXPIRESIN_REFRESHTOKEN,
     }
 
 }

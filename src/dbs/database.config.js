@@ -7,7 +7,7 @@ const database_name = envConfig.database.name
 
 const connectionString = `mongodb://${host}:${port}/${database_name}`
 //const connectionString = `mongodb://localhost:27017/demo`
-async function conect() {
+async function connectDatabase() {
     try {
         let connection = await mongoose.connect(connectionString)
         console.log('Connect mongo succesfully')
@@ -16,4 +16,4 @@ async function conect() {
         throw new Error('Cannot connect to mongo')
     }
 }
-export { conect }
+export { connectDatabase }
