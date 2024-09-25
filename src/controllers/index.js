@@ -1,5 +1,5 @@
-import { UserController } from "./user.js";
+import { AuthController } from "./auth.js";
 
-const ControllerModule = { UserController }
+const ControllerModule = { AuthController }
 
 export default ControllerModule

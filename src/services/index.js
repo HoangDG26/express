@@ -1,5 +1,5 @@
 import KeyTokenService from "./keyToken.js";
-import UserService from "./user.js";
+import AuthService from "./auth.js";
 
-const ServiceModule = { UserService, KeyTokenService }
+const ServiceModule = { AuthService, KeyTokenService }
 export default ServiceModule

@@ -1,11 +1,11 @@
 import ServiceModule from "../services/index.js"
 
-class UserController {
+class AuthController {
     static signUp = async (req, res, next) => {
         try {
             console.log(`[P]::signUp::`, req.body)
             return res.status(201).json(
-                await ServiceModule.UserService.signUp(req.body)
+                await ServiceModule.AuthService.signUp(req.body)
             )
         } catch (error) {
             next(error)
@@ -13,4 +13,4 @@ class UserController {
     }
 }
 
-export { UserController } 
+export { AuthController } 

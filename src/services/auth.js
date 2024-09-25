@@ -4,7 +4,7 @@ import crypto from 'node:crypto'
 import KeyTokenService from "./keyToken.js"
 import createTokenPair from "../auth/authUtils.js"
 import { getInforData } from "../utils/index.js"
-class UserService {
+class AuthService {
     static signUp = async ({ name, email, password }) => {
         try {
             const user = await userModel.findOne({ email }).lean()
@@ -68,4 +68,4 @@ class UserService {
         }
     }
 }
-export default UserService
+export default AuthService
