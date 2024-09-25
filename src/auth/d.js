@@ -1,14 +1,12 @@
 
 import JWT from 'jsonwebtoken'
-import { envConfig } from '../configs/config.js'
-
 const createTokenPair = async (payload, publicKey, privateKey) => {
     try {
         const accessToken = JWT.sign(payload, publicKey,
-            { expiresIn: envConfig.jwt.expiresIn_accesstoken })
+            { expiressIn: '2 days' })
 
         const refreshToken = JWT.sign(payload, privateKey,
-            { expiresIn: envConfig.jwt.expiresIn_refreshtoken })
+            { expiressIn: '7 days' })
 
         JWT.verify(accessToken, publicKey,
             (err, decode) => {
