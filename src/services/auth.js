@@ -4,68 +4,57 @@ import crypto from 'node:crypto'
 import KeyTokenService from "./keyToken.js"
 import createTokenPair from "../auth/authUtils.js"
 import { getInforData } from "../utils/index.js"
+import { ConfictResponeError } from "../handle-response/error.response.js"
 class AuthService {
     static signUp = async ({ name, email, password }) => {
-        try {
-            const user = await userModel.findOne({ email }).lean()
 
-            if (user) {
-                return {
-                    code: 409,
-                    message: "conflict user"
-                }
+        const user = await userModel.findOne({ email }).lean()
 
-            }
-            const passwordHash = await bcrypt.hash(password, 10)
-            const newUser = await userModel.create({
-                name, email, password: passwordHash, roles: [USER_ROLE.USER]
+        if (user) {
+            throw new ConfictResponeError('[Error]: User already registered !')
+
+        }
+        const passwordHash = await bcrypt.hash(password, 10)
+        const newUser = await userModel.create({
+            name, email, password: passwordHash, roles: [USER_ROLE.USER]
+        })
+
+        if (newUser) {
+            const privateKey = crypto.randomBytes(64).toString('hex')
+            const publicKey = crypto.randomBytes(64).toString('hex')
+
+            const keyStore = await KeyTokenService.createToken({
+                userId: newUser._id,
+                publicKey,
+                privateKey
             })
+            if (!keyStore) {
+                throw new ConfictResponeError('[Error]: keyStore already registered !')
+            }
+            const tokens = await createTokenPair(
+                { userId: newUser._id, email },
+                publicKey,
+                privateKey)
 
-            if (newUser) {
-                const privateKey = crypto.randomBytes(64).toString('hex')
-                const publicKey = crypto.randomBytes(64).toString('hex')
+            console.log('Created Token Successfully:', tokens)
+            console.log('user:', newUser)
 
-                const keyStore = await KeyTokenService.createToken({
-                    userId: newUser._id,
-                    publicKey,
-                    privateKey
-                })
-                if (!keyStore) {
-                    return {
-                        code: 'xxx',
-                        message: "keyStore error"
-                    }
-                }
-                const tokens = await createTokenPair(
-                    { userId: newUser._id, email },
-                    publicKey,
-                    privateKey)
-
-                console.log('Created Token Successfully:', tokens)
-                console.log('user:', newUser)
-
-                return {
-                    code: 201,
-                    metadata: {
-                        user: getInforData({
-                            fields: ['_id', 'name', 'email'],
-                            object: newUser
-                        }),
-                        tokens
-                    }
+            return {
+                code: 201,
+                metadata: {
+                    user: getInforData({
+                        fields: ['_id', 'name', 'email'],
+                        object: newUser
+                    }),
+                    tokens
                 }
             }
-            return {
-                code: 200,
-                metadata: null
-            }
-        } catch (error) {
-            return {
-                code: 'xxx-',
-                message: error.message,
-                status: 'error'
-            }
+        }
+        return {
+            code: 200,
+            metadata: null
         }
     }
 }
+
 export default AuthService

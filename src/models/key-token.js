@@ -2,9 +2,9 @@ import { model, Schema } from 'mongoose';
 const DOCUMENT_NAME = 'key'
 const COLLECTION_NAME = 'keys'
 const keySchema = new Schema({
-    user: { type: Schema.Types.ObjectId, require: true, ref: 'user' },
-    privateKey: { type: String, require: true, },
-    publicKey: { type: String, require: true, },
+    user: { type: Schema.Types.ObjectId, required: true, ref: 'user' },
+    privateKey: { type: String, required: true, },
+    publicKey: { type: String, required: true, },
     refreshToken: { type: Array, default: [], },
 }, {
     timestamps: true,

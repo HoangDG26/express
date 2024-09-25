@@ -1,12 +1,15 @@
 import express from 'express'
 import ControllerModule from '../controllers/index.js'
+import checkAuth from '../auth/checkAuth.js'
 
 const router = express.Router()
 
-router.post('/', (req, res) => {
-    res.send('post user')
-})
-router.post('/sign-up', ControllerModule.AuthController.signUp)
+//check api key
+router.use(checkAuth.apiKey)
+//check permission
+router.use(checkAuth.permission('0000'))
+
+router.post('/sign-up', checkAuth.asyncHandler(ControllerModule.AuthController.signUp))
 export default router
 
 
