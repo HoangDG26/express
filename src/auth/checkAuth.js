@@ -1,7 +1,9 @@
+import { ForbiddenResponeError } from "../handle-response/error.response.js"
 import apiKeyService from "../services/apiKey.js"
 
-const HEADER = {
+export const HEADER = {
     API_KEY: 'x-api-key',
+    CLIENT_ID: 'x-client-id',
     AUTHORIZATION: 'authorization'
 }
 const apiKey = async (req, res, next) => {
@@ -9,49 +11,34 @@ const apiKey = async (req, res, next) => {
         const key = req.headers[HEADER.API_KEY]?.toString()
         console.log(key)
         if (!key) {
-            return res.status(403).json({
-                message: 'Forbidden Error'
-            })
+            throw new ForbiddenResponeError('Forbidden Error (key invalid)')
         }
         //check objetc key
         const objKey = await apiKeyService.findById(key)
         console.log(objKey)
         if (!objKey) {
-            return res.status(403).json({
-                message: 'Forbidden Error'
-            })
+            throw new ForbiddenResponeError('Forbidden Error (objKey invalid)')
         }
         req.objKey = objKey
         return next()
     } catch (error) {
-        console.error('Error during API key validation:', error); // In lỗi ra console
-        return res.status(500).json({
-            message: 'Internal Server Error'
-        });
+        next(error)
     }
 }
 const permission = (permission) => {
     return (req, res, next) => {
         if (!req.objKey.permissions) {
-            return res.status(403).json({
-                message: 'Permission denied'
-            })
+            throw new ForbiddenResponeError('Permission denied')
         }
         console.log('permissions::', req.objKey.permissions)
         const validPermission = req.objKey.permissions.includes(permission)
         if (!validPermission) {
-            return res.status(403).json({
-                message: 'Permission denied'
-            })
+            throw new ForbiddenResponeError('Permission denied')
         }
         return next()
     }
 
 }
-const asyncHandler = fn => {
-    return (req, res, next) => {
-        fn(req, res, next).catch(next)
-    }
-}
-const checkAuth = { apiKey, permission, asyncHandler }
+
+const checkAuth = { apiKey, permission }
 export default checkAuth
