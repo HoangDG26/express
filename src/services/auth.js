@@ -2,9 +2,9 @@ import userModel, { USER_ROLE } from "../models/user.js"
 import bcrypt from 'bcrypt'
 import crypto from 'node:crypto'
 import KeyTokenService from "./keyToken.js"
-import { createTokenPair } from "../auth/authUtils.js"
+import { createTokenPair, verifyJWT } from "../auth/authUtils.js"
 import { getInforData } from "../utils/index.js"
-import { BadRequestResponeError, ConfictResponeError, NotFoundResponeError } from "../handle-response/error.response.js"
+import { BadRequestResponeError, ConfictResponeError, ForbiddenResponeError, NotFoundResponeError, UnauthorizedResponeError } from "../handle-response/error.response.js"
 import UserService from "./user.js"
 class AuthService {
     /*  sign in
@@ -91,7 +91,34 @@ class AuthService {
             metadata: null
         }
     }
+    static handlerRefreshToken = async ({ keyStore, user, refreshToken }) => {
+        const { userId, email } = user
+        if (keyStore.refreshTokensUsed.includes(refreshToken)) {
+            await KeyTokenService.deleteAllById(userId)
+            throw new ForbiddenResponeError('Something wrong happed,plz re-sign in')
+        }
+        if (keyStore.refreshToken !== refreshToken)
+            throw new UnauthorizedResponeError('[1]::User Invalid')
+        const foundUser = await UserService.findUserByEmail({ email })
+        if (!foundUser) throw new UnauthorizedResponeError('[2]::User Invalid')
+        //create token moi
+        const tokens = await createTokenPair({ userId, email }, keyStore.publicKey, keyStore.privateKey)
+        //update token
+        await keyStore.updateOne({
+            $set: {
+                refreshToken: tokens.refreshToken
+            },
+            $addToSet: {
+                refreshTokensUsed: refreshToken
+            }
+        })
+        return {
+            user,
+            tokens
 
+        }
+    }
 }
+
 
 export default AuthService

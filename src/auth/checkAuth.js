@@ -4,18 +4,17 @@ import apiKeyService from "../services/apiKey.js"
 export const HEADER = {
     API_KEY: 'x-api-key',
     CLIENT_ID: 'x-client-id',
-    AUTHORIZATION: 'authorization'
+    AUTHORIZATION: 'authorization',
+    REFRESHTOKEN: 'x-rtoken-id'
 }
 const apiKey = async (req, res, next) => {
     try {
         const key = req.headers[HEADER.API_KEY]?.toString()
-        console.log(key)
         if (!key) {
             throw new ForbiddenResponeError('Forbidden Error (key invalid)')
         }
         //check objetc key
         const objKey = await apiKeyService.findById(key)
-        console.log(objKey)
         if (!objKey) {
             throw new ForbiddenResponeError('Forbidden Error (objKey invalid)')
         }
@@ -30,7 +29,7 @@ const permission = (permission) => {
         if (!req.objKey.permissions) {
             throw new ForbiddenResponeError('Permission denied')
         }
-        console.log('permissions::', req.objKey.permissions)
+        //console.log('permissions::', req.objKey.permissions)
         const validPermission = req.objKey.permissions.includes(permission)
         if (!validPermission) {
             throw new ForbiddenResponeError('Permission denied')

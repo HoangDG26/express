@@ -20,6 +20,18 @@ class AuthController {
             metadata: await ServiceModule.AuthService.signOut(req.keyStore)
         }).sendResponse(res)
     }
+    static handlerRefreshToken = async (req, res, next) => {
+        new Success({
+            message: 'Get Token user',
+            metadata: await ServiceModule.AuthService.handlerRefreshToken({
+                refreshToken: req.refreshToken,
+                user: req.user,
+                keyStore: req.keyStore
+            })
+
+        }).sendResponse(res)
+
+    }
 }
 
 export { AuthController } 

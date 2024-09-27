@@ -15,6 +15,7 @@ router.post('/sign-in', asyncHandler(ControllerModule.AuthController.signIn))
 
 router.use(authentication)
 router.post('/sign-out', asyncHandler(ControllerModule.AuthController.signOut))
+router.post('/handler-refresh-token', asyncHandler(ControllerModule.AuthController.handlerRefreshToken))
 export default router
 
 
