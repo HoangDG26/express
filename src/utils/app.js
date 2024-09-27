@@ -2,9 +2,8 @@ import express from 'express'
 import { connectDatabase } from '../dbs/database.config.js'
 import helmet from 'helmet'
 import morgan from 'morgan'
-import { authRouter } from '../routers/index.js'
+import superRouter from '../routers/index.js'
 import compression from 'compression'
-import checkAuth from '../auth/checkAuth.js'
 
 const app = express()
 
@@ -16,26 +15,28 @@ app.use(helmet())
 app.use(express.urlencoded({
     extended: true
 }))
-//chuyen 
 
 //database---------------------
 connectDatabase()
+
 //routers------------------------
-app.use('/api/v1/auth', authRouter)
-// app.use('api/v1/students', authRouter)
+// app.use('/api/v1/auth', authRouter)
+// app.use('/api/v1/product', productRouter)
+app.use('/api/v1', superRouter)
 
 app.use((req, res, next) => {
     const err = new Error('Not Found')
     err.status = 404
     next(err)//đưa xuống handle error
 })
+
 //Handle error-----------------
 app.use((err, req, res, next) => {
     const statusCode = err.status || 500
     return res.status(statusCode).json({
         status: 'Error!',
         code: statusCode,
-        // stack: err.stack,
+        stack: err.stack,
         message: err.message || 'Internal Server Error'
     })
 })

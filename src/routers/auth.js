@@ -6,9 +6,9 @@ import { authentication } from '../auth/authUtils.js'
 const router = express.Router()
 
 //check api key
-router.use(checkAuth.apiKey)
+// router.use(checkAuth.apiKey)
 //check permission
-router.use(checkAuth.permission('0000'))
+// router.use(checkAuth.permission('0000'))
 
 router.post('/sign-up', asyncHandler(ControllerModule.AuthController.signUp))
 router.post('/sign-in', asyncHandler(ControllerModule.AuthController.signIn))

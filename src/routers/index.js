@@ -1,7 +1,17 @@
 import authRouter from './auth.js'
-import studentRouter from './student.js'
+import productRouter from './product.js'
+import checkAuth from '../auth/checkAuth.js'
+import express from 'express'
+const router = express.Router()
 
-export {
-    authRouter,
-    studentRouter
-}
+
+//check api key
+router.use(checkAuth.apiKey)
+//check permission
+router.use(checkAuth.permission('0000'))
+
+router.use('/auth', authRouter)//router tổng của auth
+router.use('/product', productRouter)//router tổng của product
+
+
+export default router

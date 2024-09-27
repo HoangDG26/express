@@ -1,20 +1,4 @@
 import { ReasonPhrases, StatusCodes } from "http-status-codes"
-
-// const STATUS_CODE = {
-//     BAD_REQUEST: 400,
-//     NOT_FOUND: 404,
-//     FORBIDDEN: 403,
-//     UNAUTHORIZED: 401,
-//     CONFLICT: 409
-// }
-// const REASON_CODE = {
-//     BAD_REQUEST: 'Bad request Error',
-//     NOT_FOUND: 'Cannot Found Error',
-//     FORBIDDEN: 'Forbidden Error',
-//     UNAUTHORIZED: 'Unauthorized Error',
-//     CONFLICT: 'Conlict Error'
-// }
-
 class ErrorResonse extends Error {
     constructor(message, status) {
         super(message)
