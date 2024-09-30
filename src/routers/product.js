@@ -6,12 +6,18 @@ const router = express.Router()
 
 
 
-// router.use(checkAuth.apiKey)
-// //check permission
-// router.use(checkAuth.permission('0000'))
+//search khong can check authen
+router.get('/search/:keySearch', asyncHandler(ControllerModule.ProductController.searchProducts))
 
 router.use(authentication)
+/////////////////////////////
 router.post('/', asyncHandler(ControllerModule.ProductController.createProduct))
+router.post('/published/:id', asyncHandler(ControllerModule.ProductController.publishProductByShop))
+router.post('/unpublished/:id', asyncHandler(ControllerModule.ProductController.unPublishProductByShop))
+
+//Query
+router.get('/draft', asyncHandler(ControllerModule.ProductController.findAdllDraft))
+router.get('/published', asyncHandler(ControllerModule.ProductController.findAdllPublished))
 
 export default router
 

@@ -1,11 +1,3 @@
-// const STATUS_CODE = {
-//     OK: 200,
-//     CREATED: 201,
-// }
-// const REASON_CODE = {
-//     OK: 'Success',
-//     CREATED: 'Create Success',
-// }
 import { ReasonPhrases, StatusCodes } from "http-status-codes"
 class SuccessResponse {
     constructor({

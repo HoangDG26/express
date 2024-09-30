@@ -9,9 +9,9 @@ const router = express.Router()
 router.use(checkAuth.apiKey)
 //check permission
 router.use(checkAuth.permission('0000'))
-
-router.use('/auth', authRouter)//router tổng của auth
 router.use('/product', productRouter)//router tổng của product
+router.use('/auth', authRouter)//router tổng của auth
+
 
 
 export default router

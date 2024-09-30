@@ -1,5 +1,6 @@
 import { BadRequestResponeError, NotFoundResponeError } from '../handle-response/error.response.js';
 import productModel from '../models/products.js';
+import productRepo from '../models/repositories/product.js';
 class ProductService {
 
     static productRegistry = {}
@@ -11,6 +12,33 @@ class ProductService {
         const productClass = ProductService.productRegistry[type]
         if (!productClass) throw new BadRequestResponeError(`Invalid type: ${type}`)
         return new productClass(payload).createProduct()
+    }
+    // lấy tất cả record là bản nháp khi isDraft = true
+    static async findAdllDraft({ product_shop, limit = 50, skip = 0 }) {
+        const query = { product_shop, isDraft: true }
+        return await productRepo.findAdllDraft({ query, skip, limit })
+    }
+    // lấy tất cả record là bản nháp khi isPublish = true
+    static async findAdllPublished({ product_shop, limit = 50, skip = 0 }) {
+        const query = { product_shop, isPublished: true }
+        console.log("🚀 ~ ProductService ~ findAdllPublished :", await productRepo.findAdllPublished({ query, skip, limit }))
+        return await productRepo.findAdllPublished({ query, skip, limit })
+    }
+    // xuẩt bản các bản nháp ra
+    // dùng đầu PUT
+    static async publishProductByShop({ product_shop, product_id }) {
+        console.log("🚀 ~ ProductService ~ publishProductByShop ~ product_id:", product_id)
+        return productRepo.publishProductByShop({ product_shop, product_id })
+
+    }
+    static async unPublishProductByShop({ product_shop, product_id }) {
+        console.log("🚀 ~ ProductService ~ publishProductByShop ~ product_id:", product_id)
+        return productRepo.unPublishProductByShop({ product_shop, product_id })
+
+    }
+    //search thif k cần verify user
+    static async searchProducts({ keySearch }) {
+        return await productRepo.searchProducts({ keySearch })
     }
 }
 class Product {

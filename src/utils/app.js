@@ -20,8 +20,7 @@ app.use(express.urlencoded({
 connectDatabase()
 
 //routers------------------------
-// app.use('/api/v1/auth', authRouter)
-// app.use('/api/v1/product', productRouter)
+
 app.use('/api/v1', superRouter)
 
 app.use((req, res, next) => {
