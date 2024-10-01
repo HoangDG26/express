@@ -1,5 +1,6 @@
 import { BadRequestResponeError, NotFoundResponeError } from '../handle-response/error.response.js';
 import productModel from '../models/products.js';
+import invenRepo from '../models/repositories/iventory.js';
 import productRepo from '../models/repositories/product.js';
 import { removeUndefinedObject, updateNestedObjectParser } from '../utils/index.js';
 class ProductService {
@@ -76,9 +77,18 @@ class Product {
     }
     //create new product
     async createProduct(product_id) {
-        return await productModel.product.create({
+        const newProduct = await productModel.product.create({
             ...this, _id: product_id
         })
+        if (newProduct) {
+            // thêm luôn vào hàng tồn kho
+            await invenRepo.insertInvetory({
+                productId: newProduct._id,
+                userId: this.product_shop,
+                stock: this.product_quantity
+            })
+        }
+        return newProduct
     }
     // Update product by id
     async updateProduct(product_id, bodyUpdate) {
