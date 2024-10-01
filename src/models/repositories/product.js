@@ -1,4 +1,5 @@
 
+import { getSelectData, unSelectData } from '../../utils/index.js'
 import productModel from '../products.js'
 
 const findAdllDraft = async ({ query, limit, skip }) => {
@@ -44,20 +45,49 @@ const unPublishProductByShop = async ({ product_shop, product_id }) => {
 }
 ////////////////
 const searchProducts = async ({ keySearch }) => {
-    // Thay vì tạo regex, hãy sử dụng keySearch trực tiếp cho $search
     const results = await productModel.product.find(
         {
             isDraft: false,
-            $text: { $search: keySearch }  // Sử dụng keySearch thay vì regex
+            $text: { $search: keySearch }
         },
         {
-            score: { $meta: 'textScore' }  // Sửa lại để lấy score đúng cách
+            score: { $meta: 'textScore' }
         }
     )
-        .sort({ score: { $meta: 'textScore' } }) // Sửa lại để lấy score đúng cách
+        .sort({ score: { $meta: 'textScore' } })
         .lean();
 
     return results;
+}
+////////////////
+const findAllProducts = async ({ limit, sort, page, filter, select }) => {
+    const skip = (page - 1) * limit
+    const sortBy = sort === 'ctime' ? { _id: -1 } : { _id: 1 }
+    const products = await productModel.product.find(filter)
+        .sort(sortBy)
+        .skip(skip)
+        .limit(limit)
+        .select(getSelectData(select))
+        .lean()
+    return products
+
+}
+////////////////
+const findProductById = async ({ product_id, unSelect }) => {
+    const product = await productModel.product.findById({ _id: product_id })
+        .select(unSelectData(unSelect))
+    return product
+
+}
+////////////////
+const updateProductById = async ({ product_id, bodyUpdate, model, isNew = true }) => {
+    const product = await model.findByIdAndUpdate(
+        product_id,
+        bodyUpdate,
+        { new: isNew }
+    )
+    return product
+
 }
 
 const productRepo = {
@@ -65,6 +95,10 @@ const productRepo = {
     publishProductByShop,
     findAdllPublished,
     unPublishProductByShop,
-    searchProducts
+    searchProducts,
+    findAllProducts,
+    findProductById,
+    updateProductById,
+
 }
 export default productRepo

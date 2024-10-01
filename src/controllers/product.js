@@ -11,7 +11,18 @@ class ProductController {
             })
         }).sendResponse(res)
     }
-
+    static updateProduct = async (req, res, next) => {
+        new Success({
+            message: 'Update Product By Id ',
+            metadata: await ServiceModule.ProductService.updateProduct(
+                req.body.product_type,
+                req.params.id,
+                {
+                    ...req.body,
+                    product_shop: req.user.userId
+                })
+        }).sendResponse(res)
+    }
     static publishProductByShop = async (req, res, next) => {
         new CreatedSuccess({
             message: 'Publish Product Sucess ',
@@ -68,6 +79,22 @@ class ProductController {
             metadata: await ServiceModule.ProductService.searchProducts(req.params)
         }).sendResponse(res)
     }
+    static findAllProducts = async (req, res, next) => {
+        new Success({
+            message: 'Find All Products ',
+            metadata: await ServiceModule.ProductService.findAllProducts(req.query)
+        }).sendResponse(res)
+    }
+    static findProductById = async (req, res, next) => {
+        new Success({
+            message: 'Find Product By Id ',
+            metadata: await ServiceModule.ProductService.findProductById({
+                product_id: req.params.id
+            })
+        }).sendResponse(res)
+    }
+
+
 }
 
 export { ProductController } 

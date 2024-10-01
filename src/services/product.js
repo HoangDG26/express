@@ -1,6 +1,7 @@
 import { BadRequestResponeError, NotFoundResponeError } from '../handle-response/error.response.js';
 import productModel from '../models/products.js';
 import productRepo from '../models/repositories/product.js';
+import { removeUndefinedObject, updateNestedObjectParser } from '../utils/index.js';
 class ProductService {
 
     static productRegistry = {}
@@ -8,10 +9,14 @@ class ProductService {
         ProductService.productRegistry[type] = classRef
     }
     static async createProduct(type, payload) {
-        console.log('sdsdsdsdsdsd: ', payload)
         const productClass = ProductService.productRegistry[type]
         if (!productClass) throw new BadRequestResponeError(`Invalid type: ${type}`)
         return new productClass(payload).createProduct()
+    }
+    static async updateProduct(type, product_id, payload) {
+        const productClass = ProductService.productRegistry[type]
+        if (!productClass) throw new BadRequestResponeError(`Invalid type: ${type}`)
+        return new productClass(payload).updateProduct(product_id)
     }
     // lấy tất cả record là bản nháp khi isDraft = true
     static async findAdllDraft({ product_shop, limit = 50, skip = 0 }) {
@@ -27,18 +32,33 @@ class ProductService {
     // xuẩt bản các bản nháp ra
     // dùng đầu PUT
     static async publishProductByShop({ product_shop, product_id }) {
-        console.log("🚀 ~ ProductService ~ publishProductByShop ~ product_id:", product_id)
         return productRepo.publishProductByShop({ product_shop, product_id })
 
     }
     static async unPublishProductByShop({ product_shop, product_id }) {
-        console.log("🚀 ~ ProductService ~ publishProductByShop ~ product_id:", product_id)
         return productRepo.unPublishProductByShop({ product_shop, product_id })
 
     }
-    //search thif k cần verify user
+    //search thi k cần verify user
     static async searchProducts({ keySearch }) {
         return await productRepo.searchProducts({ keySearch })
+    }
+    //find all product
+    static async findAllProducts({ limit = 50, sort = 'ctime', page = 1, filter = { isPublished: true } }) {
+        return await productRepo.findAllProducts({
+            limit, sort, page, filter,
+            select: ['product_name', 'product_price', 'product_thumb']
+
+        })
+
+    }
+    /// find product by id
+    static async findProductById({ product_id }) {
+        return await productRepo.findProductById({
+            product_id,
+            unSelect: ['__v']
+
+        })
     }
 }
 class Product {
@@ -60,6 +80,10 @@ class Product {
             ...this, _id: product_id
         })
     }
+    // Update product by id
+    async updateProduct(product_id, bodyUpdate) {
+        return await productRepo.updateProductById({ product_id, bodyUpdate, model: productModel.product })
+    }
 }
 //sub-class
 class Clothes extends Product {
@@ -75,6 +99,26 @@ class Clothes extends Product {
         const newProduct = super.createProduct()
         if (!newProduct) throw new NotFoundResponeError('[1]Create new product error')
         return newProduct
+    }
+
+    /////////////////////
+    async updateProduct(product_id) {
+        /*1. remove nhung atrribute co gia gi null hoac undefined (có thể do truyền nhầm giá trị)- 
+        remove trc để tránh replace nhầm trường có dữ liệu thành null*/
+        const objectParams = removeUndefinedObject(this)
+        //2. check xem update ở vị trí nào nêu update attributes thì phải update cha rồi lớp con
+        if (objectParams.product_attributes) {
+            //update thang con
+            await productRepo.updateProductById({
+                product_id,
+                bodyUpdate: updateNestedObjectParser(objectParams.product_attributes),
+                model: productModel.cloth
+            })
+        }
+        //update thang cha
+        const updateProduct = await super.updateProduct(product_id, updateNestedObjectParser(objectParams))
+
+        return updateProduct
     }
 }
 class Electronics extends Product {
