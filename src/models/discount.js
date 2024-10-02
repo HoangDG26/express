@@ -6,11 +6,11 @@ const discountSchema = new Schema({
     discount_name: { type: String, required: true },
     discount_description: { type: String, required: true },
     discount_type: { type: String, default: 'fixed_amount' },// hoặc là percentage,
-    discount_vallue: { type: Number, required: true },
+    discount_value: { type: Number, required: true },
     discount_code: { type: String, required: true },//voucher
     discount_start_date: { type: Date, required: true },//ngay bat dau
     discount_end_date: { type: Date, required: true },//ngay ket thuc
-    distcount_max_uses: { type: Number, required: true },//so luong disscount duoc ap dung
+    discount_max_uses: { type: Number, required: true },//so luong disscount duoc ap dung
     discount_uses_count: { type: Number, required: true },//so discount da su dung
     discount_users_used: { type: Array, default: [] },//ai su dung
     discount_max_uses_per_user: { type: Number, required: true },// so luong toi da cho 1 nguoi

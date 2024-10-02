@@ -1,8 +1,12 @@
 import _ from 'lodash'
+import { Types } from 'mongoose'
 
 const getInforData = ({ fields = [], object = {} }) => {
     return _.pick(object, fields)
 }
+
+const convertToObjectIdMongodb = id => new Types.ObjectId(id)
+
 //['a','b'] => {a:1,b:1}
 const getSelectData = (select = []) => {
     const obj = Object.fromEntries(select.map(el => [el, 1]))
@@ -42,5 +46,6 @@ export {
     getSelectData,
     unSelectData,
     removeUndefinedObject,
-    updateNestedObjectParser
+    updateNestedObjectParser,
+    convertToObjectIdMongodb
 }
