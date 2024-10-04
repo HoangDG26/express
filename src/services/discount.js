@@ -56,7 +56,7 @@ class DiscountService {
             discount_start_date: new Date(start_date),
             discount_end_date: new Date(end_date),
             discount_max_uses_per_user: max_uses_per_user,
-            distcount_max_uses: max_uses,
+            discount_max_uses: max_uses,
             discount_uses_count: uses_count,
             discount_users_used: users_used,
             discount_min_order_value: min_order_value || 0,

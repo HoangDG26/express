@@ -89,6 +89,10 @@ const updateProductById = async ({ product_id, bodyUpdate, model, isNew = true }
     return product
 
 }
+const getProductById = async (productId) => {
+    const product = await productModel.product.findOne({ _id: productId }).lean()
+    return product
+}
 
 const productRepo = {
     findAdllDraft,
@@ -99,6 +103,6 @@ const productRepo = {
     findAllProducts,
     findProductById,
     updateProductById,
-
+    getProductById,
 }
 export default productRepo
