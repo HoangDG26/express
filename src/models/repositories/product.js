@@ -95,8 +95,9 @@ const getProductById = async (productId) => {
     return product
 }
 const checkProductByServer = async (products) => {
-    return await mongoose.Promise.all(products.map(async product => {
+    return await Promise.all(products.map(async product => {
         const foundProduct = await getProductById(product.productId)
+        console.log("🚀 ~ checkProductByServer ~ foundProduct:", foundProduct)
         if (foundProduct)
             return {
                 price: foundProduct.product_price,

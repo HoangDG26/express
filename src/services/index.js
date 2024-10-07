@@ -4,6 +4,7 @@ import ProductService from "./product.js";
 import DiscountService from "./discount.js";
 import CartService from "./cart.js";
 import CheckoutService from "./checkout.js";
+import InventoryService from "./inventory.js";
 
 const ServiceModule = {
     AuthService,
@@ -11,6 +12,7 @@ const ServiceModule = {
     ProductService,
     DiscountService,
     CartService,
-    CheckoutService
+    CheckoutService,
+    InventoryService
 }
 export default ServiceModule

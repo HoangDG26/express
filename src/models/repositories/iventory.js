@@ -13,6 +13,23 @@ const insertInvetory = async ({
         iven_location: location,
 
     })
+
 }
-const invenRepo = { insertInvetory }
+const reservationInventory = async ({ productId, quantity, cartId }) => {
+    const query = {
+        inven_productId: productId,
+        inven_stock: { $gte: quantity }
+    }, updateSet = {
+        $inc: { inven_stock: - quantity },
+        $push: {
+            inven_reservations: {
+                quantity,
+                cartId,
+                createOnl: new Date()
+            }
+        }
+    }.options = { upsert: true, new: true }
+    return await inventoryModel.updateMany(query, updateSet)
+}
+const invenRepo = { insertInvetory, reservationInventory }
 export default invenRepo

@@ -13,7 +13,10 @@ const cartSchema = new Schema({
     cart_userId: { type: Array, required: true }
 
 }, {
-    timestamps: true,
+    timestamps: {
+        createdAt: 'createdOn',
+        updatedAt: 'modifiedOn'
+    },
     collection: COLLECTION_NAME,
 }
 

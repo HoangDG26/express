@@ -14,7 +14,7 @@ class CartController {
         new CreatedSuccess({
             message: 'add to cart successfull',
             metadata: await ServiceModule.CartService.addToCart({
-                ...req.body, cart_userId
+                ...req.body,
             })
         }).sendResponse(res)
     }

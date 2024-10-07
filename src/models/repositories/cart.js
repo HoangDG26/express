@@ -1,7 +1,7 @@
 import cartModel from "../cart.js"
 
-const findidrtById = async (cartId) => {
+const findCartById = async (cartId) => {
     return await cartModel.findOne({ _id: cartId, cart_state: 'active' }).lean()
 }
-const cartRepo = { findidrtById }
+const cartRepo = { findCartById }
 export default cartRepo
