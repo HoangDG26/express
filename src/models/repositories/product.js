@@ -1,4 +1,5 @@
 
+import mongoose from 'mongoose'
 import { getSelectData, unSelectData } from '../../utils/index.js'
 import productModel from '../products.js'
 
@@ -93,6 +94,18 @@ const getProductById = async (productId) => {
     const product = await productModel.product.findOne({ _id: productId }).lean()
     return product
 }
+const checkProductByServer = async (products) => {
+    return await Promise.all(products.map(async product => {
+        const foundProduct = await getProductById(product.productId)
+        console.log("🚀 ~ checkProductByServer ~ foundProduct:", foundProduct)
+        if (foundProduct)
+            return {
+                price: foundProduct.product_price,
+                quantity: product.quantity,
+                productId: product.productId
+            }
+    }))
+}
 
 const productRepo = {
     findAdllDraft,
@@ -104,5 +117,6 @@ const productRepo = {
     findProductById,
     updateProductById,
     getProductById,
+    checkProductByServer,
 }
 export default productRepo
