@@ -1,6 +1,6 @@
 import redis from 'redis'
 import { promisify } from 'util'
-import invenRepo from '../models/repositories/iventory'
+import invenRepo from '../models/repositories/iventory.js'
 
 const redisClient = redis.createClient()
 
