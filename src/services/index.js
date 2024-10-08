@@ -5,6 +5,7 @@ import DiscountService from "./discount.js";
 import CartService from "./cart.js";
 import CheckoutService from "./checkout.js";
 import InventoryService from "./inventory.js";
+import CommentService from "./comment.js";
 
 const ServiceModule = {
     AuthService,
@@ -13,6 +14,7 @@ const ServiceModule = {
     DiscountService,
     CartService,
     CheckoutService,
-    InventoryService
+    InventoryService,
+    CommentService,
 }
 export default ServiceModule
