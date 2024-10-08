@@ -5,6 +5,7 @@ import checkAuth from '../auth/checkAuth.js'
 import cartRouter from './cart.js'
 import inventoryRouter from './inventory.js'
 import discountRouter from './discount.js'
+import commentRouter from './comment.js'
 import express from 'express'
 const router = express.Router()
 
@@ -19,6 +20,7 @@ router.use('/checkout', checkoutRouter)//router tổng của product
 router.use('/discount', discountRouter)
 router.use('/cart', cartRouter)
 router.use('/inventory', inventoryRouter)
+router.use('/comment', commentRouter)
 router.use('/auth', authRouter)//router tổng của auth
 
 
