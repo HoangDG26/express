@@ -1,6 +1,7 @@
-import { NotFoundResponeError } from "../handle-response/error.response";
-import inventoryModel from "../models/inventories";
-import productRepo from "../models/repositories/product"
+import { NotFoundResponeError } from "../handle-response/error.response.js";
+import inventoryModel from "../models/inventories.js";
+import productRepo from "../models/repositories/product.js";
+
 
 class InventoryService {
     static async addStockToInventory({

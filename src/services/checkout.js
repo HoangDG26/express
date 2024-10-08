@@ -156,3 +156,21 @@ class CheckoutService {
     }
 }
 export default CheckoutService
+// const array = [1, 2, 3, 4, 5, 55, 4, 3]
+// const af = array.includes(5, 6)
+// console.log("🚀 ~ array:", array)
+// console.log("🚀 ~ af:", af)
+const numbers = [1, 2, 3, 4, 5, 6, 7, 8];
+
+let txt = "";
+for (let x in numbers) {
+    txt += numbers[x];
+}
+console.log("🚀 ~ txt:", txt)
+const cars = ["BMW", "Volvo", "Mini"];
+
+let text = "";
+for (let x of cars) {
+    text += x;
+}
+console.log("🚀 ~ text[2]:", text)
